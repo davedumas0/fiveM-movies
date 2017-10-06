@@ -154,7 +154,9 @@ function IsPlayerInArea()
               SetEntityHeading(playerPed, 180.475)
 			  TaskLookAtCoord(GetPlayerPed(-1), 319.259, 251.827, 85.648, -1, 2048, 3)
 			  FreezeEntityPosition(GetPlayerPed(-1), 1)	
-              Notify("press ~r~ESC ~w~key to exit")			  
+                  SetNotificationTextEntry('STRING')
+                  AddTextComponentString("press ~r~ESC ~w~key to exit")
+                  DrawNotification(false, false)			  
             end
           end
         end

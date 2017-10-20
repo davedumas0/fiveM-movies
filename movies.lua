@@ -1,3 +1,5 @@
+
+
 ----------------------------------------------------------
 ---------------------load movie settings------------------
 ----------------------------------------------------------
@@ -156,7 +158,7 @@ function IsPlayerInArea()
 			  FreezeEntityPosition(GetPlayerPed(-1), 1)	
                   SetNotificationTextEntry('STRING')
                   AddTextComponentString("press ~r~ESC ~w~key to exit")
-                  DrawNotification(false, false)			  
+                  DrawNotification(false, false)		  
             end
           end
         end
@@ -171,7 +173,6 @@ end)
 --if the player is not inside theater delete screen
 Citizen.CreateThread(function()
  if GetRoomKeyFromEntity(PlayerPedId()) ~= -1337806789 and DoesEntityExist(GetClosestObjectOfType(319.884, 262.103, 82.917, 20.475, cin_screen, 0, 0, 0)) then
- 
     DeconstructMovie() 
  end
 -- Create the blips for the cinema's
@@ -201,6 +202,7 @@ Citizen.CreateThread(function()
 	 SetFollowPedCamViewMode(4)
 	else
      SetEntityVisible(PlayerPedId(-1), true)
+	 SetPlayerInvincible(PlayerId(), false)
 	end 
     end
 end)

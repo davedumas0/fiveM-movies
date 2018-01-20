@@ -76,27 +76,23 @@ function SetupMovie()
   if IsNamedRendertargetLinked(cin_screen) and IsNamedRendertargetRegistered("cinscreen") then
 --this sets the rendertargets channel and video 
 	Citizen.InvokeNative(0x9DD5A62390C3B735, 2, randomVideo(), 0)
---this sets the rendertarget	
-	SetTextRenderId(rendertargetid)
 --duh sets the volume
 	SetTvVolume(100)	
 --duh sets the cannel
     SetTvChannel(2)
 --duh sets subtitles
     EnableMovieSubtitles(1)
---these are for the rendertarget 2d settings and stuff	
-    Citizen.InvokeNative(0x67A346B3CDB15CA5, 100.0)
-    Citizen.InvokeNative(0x61BB1D9B3A95D802, 4)
-    Citizen.InvokeNative(0xC6372ECD45D73BCD, 1)
-  else 
---this puts the rendertarget back to regular use(playing)
-   SetTextRenderId(GetDefaultScriptRendertargetRenderId())
   end
   if MovieState == false then
     MovieState = true
     CreateMovieThread()
   end
 end
+
+
+
+
+
 function helpDisplay(text, state)
   SetTextComponentFormat("STRING")
   AddTextComponentString(text)
@@ -112,25 +108,34 @@ function DeconstructMovie()
   SetEntityAsMissionEntity(obj,true,false)
   DeleteObject(obj)
 end
+
+
 --this FUNCTION is what draws the tv channel(needs to be in a loop)
 function StartMovie()
+ --this sets the rendertarget	
+	SetTextRenderId(rendertargetid)
+	 SetScreenDrawPosition(0, 0)
+
+--these are for the rendertarget 2d settings and stuff	
+    Citizen.InvokeNative(0x67A346B3CDB15CA5, 100.0)
+    Citizen.InvokeNative(0x61BB1D9B3A95D802, 4)
+    Citizen.InvokeNative(0xC6372ECD45D73BCD, 1)
     DrawTvChannel(0.5, 0.5, 1.0, 1.0, 0.0, 255, 255, 255, 255)
+	ScreenDrawPositionEnd()
+   SetTextRenderId(GetDefaultScriptRendertargetRenderId())
 end
+
 --this starts the movie
 function CreateMovieThread()
   Citizen.CreateThread(function()
-    SetTextRenderId(GetNamedRendertargetRenderId("cinscreen"))
-	Citizen.InvokeNative(0x9DD5A62390C3B735, 2, randomVideo(), 0)		
-	SetTvChannel(2)
-	Citizen.InvokeNative(0x67A346B3CDB15CA5, 100.0)
-    Citizen.InvokeNative(0x61BB1D9B3A95D802, 4)
-    Citizen.InvokeNative(0xC6372ECD45D73BCD, 1)		
     while(true) do
       Citizen.Wait(0)
       StartMovie()
     end
   end)
 end
+
+
 --this is the enter theater stuff
 function IsPlayerInArea()
   playerPed = GetPlayerPed(-1)
@@ -163,17 +168,24 @@ function IsPlayerInArea()
           end
         end
       end
-end					
+end	
+
+
+				
 Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
     IsPlayerInArea()
+ 
   end
 end)
 --if the player is not inside theater delete screen
 Citizen.CreateThread(function()
  if GetRoomKeyFromEntity(PlayerPedId()) ~= -1337806789 and DoesEntityExist(GetClosestObjectOfType(319.884, 262.103, 82.917, 20.475, cin_screen, 0, 0, 0)) then
+ 
     DeconstructMovie() 
+ end
+ if GetRoomKeyFromEntity(PlayerPedId()) ~= 1196036993 and DoesEntityExist(GetClosestObjectOfType(-802.0, 343.19, 158.81, cin_screen, 0, 0, 0)) then
  end
 -- Create the blips for the cinema's
   LoadBlips()      
@@ -184,22 +196,21 @@ Citizen.CreateThread(function()
     playerPed = GetPlayerPed(-1)   
 --if player hits "esc" key while in theater they exit
       if IsControlPressed(0, 322) and GetRoomKeyFromEntity(PlayerPedId()) == -1337806789 then
-	DoScreenFadeOut(1000)
+	    DoScreenFadeOut(1000)
         SetEntityCoords(playerPed, 297.891, 193.296, 104.344, 161.925)
-	Citizen.Wait(30)		
-	DoScreenFadeIn(800)
-	FreezeEntityPosition(GetPlayerPed(-1), 0)
-	SetFollowPedCamViewMode(fistPerson)
-	DeconstructMovie()
-	SetPlayerInvincible(PlayerId(), false)			
+		Citizen.Wait(30)		
+		DoScreenFadeIn(800)
+		FreezeEntityPosition(GetPlayerPed(-1), 0)
+		SetFollowPedCamViewMode(fistPerson)
+		DeconstructMovie()
         --ClearRoomForEntity(playerPed)
         MovieState = false
       end
     if GetRoomKeyFromEntity(PlayerPedId()) == -1337806789 then
-	 --SetPlayerInvisibleLocally(PlayerId(),  true)
-	 SetEntityVisible(PlayerPedId(-1), false)
+	 SetPlayerInvisibleLocally(PlayerId(), false)
+	 SetEntityVisible(PlayerPedId(), false)
 	 SetPlayerInvincible(PlayerId(), true)
-     	 SetCurrentPedWeapon(PlayerPedId(), GetHashKey("weapon_unarmed"), 1)
+     SetCurrentPedWeapon(PlayerPedId(), GetHashKey("weapon_unarmed"), 1)
 	 SetFollowPedCamViewMode(4)
 	else
      SetEntityVisible(PlayerPedId(-1), true)

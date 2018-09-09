@@ -151,6 +151,7 @@ function IsPlayerInArea()
             helpDisplay("Press ~INPUT_CONTEXT~ to watch a movie", 0)
 -- Check if the player is near the cinema and pressed "INPUT_CONTEXT"
 			if IsControlPressed(0, 38) then
+		          ReturnPlayerCoords = playerCoords
 			  DoScreenFadeOut(1000)
 			  SetupMovie()
 -- Teleport the Player inside the cinema
@@ -197,7 +198,7 @@ Citizen.CreateThread(function()
 --if player hits "esc" key while in theater they exit
       if IsControlPressed(0, 322) and GetRoomKeyFromEntity(PlayerPedId()) == -1337806789 then
 	    DoScreenFadeOut(1000)
-        SetEntityCoords(playerPed, 297.891, 193.296, 104.344, 161.925)
+        SetEntityCoords(playerPed, ReturnPlayerCoords.x, ReturnPlayerCoords.y, ReturnPlayerCoords.z, true, true, true, true)
 		Citizen.Wait(30)		
 		DoScreenFadeIn(800)
 		FreezeEntityPosition(GetPlayerPed(-1), 0)

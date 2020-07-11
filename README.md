@@ -1,3 +1,2 @@
-# fiveM-movies
-
-this is done please make an issue if you want me to change anything
+# fiveM-m
+i am no longer maintaining this repo but if you make a push i will merge it
